@@ -17,10 +17,10 @@ public class PlayerAttackScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        attack();
+        attackAnimation();
     }
 
-    void attack()
+    void attackAnimation()
     {
         bool attacking = false;
 
@@ -37,5 +37,10 @@ public class PlayerAttackScript : MonoBehaviour
             playerSprite.GetComponent<Animator>().SetBool("attacking", false);
         }
         
+    }
+
+    void attack()
+    {
+        Collider2D[] inimigosAtacados = Physics2D
     }
 }
