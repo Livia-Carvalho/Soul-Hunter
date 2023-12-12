@@ -7,6 +7,9 @@ public class PlayerAttackScript : MonoBehaviour
 {
 
     private GameObject playerSprite;
+    [SerializeField] private Transform attackPos;
+    [SerializeField] private float attackRange = 5f;
+    private LayerMask enemiesLayerMask;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +44,10 @@ public class PlayerAttackScript : MonoBehaviour
 
     void attack()
     {
-        Collider2D[] inimigosAtacados = Physics2D
+        Collider2D[] inimigosAtacados = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemiesLayerMask);
+        for (int i = 0; i < inimigosAtacados.Length; i++)
+        {
+            
+        }
     }
 }

@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     private bool chegou = false;
     [SerializeField] private float duracaoDaRonda = 7f; //Segundos
     [SerializeField] private float margemDistanciaDestino = 0.1f; 
+    public bool nocauteado = false;
 
     public bool rondando = true;
 
