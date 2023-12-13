@@ -29,7 +29,10 @@ public class EnemyScript : MonoBehaviour
     public LayerMask obstructionMask;
     public bool canSeePlayer;
 
-    public bool perseguindo;
+    public bool perseguindo = false;
+    [SerializeField] private float margemDistanciaAtaque = 0.5f;
+    [SerializeField] private float enemyAttackCooldown = 1.5f;
+    private float enemyLastAttackTime = 0f;
 
 
 
@@ -61,6 +64,7 @@ public class EnemyScript : MonoBehaviour
         if(perseguindo)
         {
             perseguirJogador();
+            alcancarJogador();
         }
 
         if(rondando)
@@ -77,9 +81,27 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
+    private void alcancarJogador()
+    {
+        if (agent.remainingDistance <= agent.stoppingDistance + margemDistanciaAtaque)
+        {
+            chegou = true;
+            atacarJogador();
+        }
+    }
+
+    private void atacarJogador()
+    {
+        if (Time.time > (enemyLastAttackTime + enemyAttackCooldown))
+        {
+            playerRef.GetComponent<PlayerInventoryScript>().playerHP -= 1;
+            enemyLastAttackTime = Time.time;
+        }    
+    }
+
     private void perseguirJogador()
     {
-        agent.SetDestination(playerRef.transform.position);
+        agent.SetDestination(playerRef.transform.position);   
     }
 
     void nocaute()
