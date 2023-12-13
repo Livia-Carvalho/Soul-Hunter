@@ -37,6 +37,8 @@ public class NewBehaviourScript : MonoBehaviour
             running = true;
         }
 
+        gameObject.GetComponent<PlayerAttackScript>().moveAttackPosition(verticalInput, horizontalInput);
+
         //Set animations
         if (horizontalInput == 0 && verticalInput == 0)
         {

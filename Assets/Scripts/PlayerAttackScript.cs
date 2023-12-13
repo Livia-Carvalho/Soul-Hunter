@@ -15,10 +15,12 @@ public class PlayerAttackScript : MonoBehaviour
 
     bool attacking = false;
 
+
     // Start is called before the first frame update
     void Start()
     {
         playerSprite = GameObject.FindGameObjectsWithTag("PlayerSprite")[0];
+        attackPos.position = gameObject.transform.position + new Vector3(10, 0, 0);
     }
 
     // Update is called once per frame
@@ -67,6 +69,12 @@ public class PlayerAttackScript : MonoBehaviour
             lastAttackTime = Time.time;
         }
         
+    }
+
+    public void moveAttackPosition(float verticalDirection, float horizontalDirection)
+    {
+
+        attackPos.position = gameObject.transform.position + new Vector3(horizontalDirection * 10, verticalDirection * 10, 0);
     }
 
     private void OnDrawGizmosSelected()

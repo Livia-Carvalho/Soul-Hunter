@@ -63,6 +63,7 @@ public class EnemyScript : MonoBehaviour
             {
                 nocauteado = false;
                 recuperando = false;
+                agent.isStopped = false;
                 definirProximoDestino();
             }
         }
