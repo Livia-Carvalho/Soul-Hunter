@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerSprite
   - PontosDeRonda
+  - EnemySprite
   layers:
   - Default
   - TransparentFX

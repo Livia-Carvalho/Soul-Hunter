@@ -9,6 +9,8 @@ using UnityEngine.UIElements;
 public class EnemyScript : MonoBehaviour
 {
 
+    private GameObject enemySprite;
+
     public NavMeshAgent agent;
     private float tempoDeChegada;
     private bool chegou = false;
@@ -43,6 +45,8 @@ public class EnemyScript : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
 
+        enemySprite = GameObject.FindGameObjectsWithTag("EnemySprite")[0];
+
         playerRef = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(FOVRoutine());
     }
@@ -50,7 +54,9 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canSeePlayer)
+        checarDirecao();
+
+        if (canSeePlayer)
         {
             rondando = false;
             perseguindo = true;
@@ -85,6 +91,8 @@ public class EnemyScript : MonoBehaviour
     {
         if (agent.remainingDistance <= agent.stoppingDistance + margemDistanciaAtaque)
         {
+
+            enemySprite.GetComponent<Animator>().SetBool("walking", false);
             chegou = true;
             atacarJogador();
         }
@@ -94,19 +102,24 @@ public class EnemyScript : MonoBehaviour
     {
         if (Time.time > (enemyLastAttackTime + enemyAttackCooldown))
         {
+            enemySprite.GetComponent<Animator>().SetBool("attacking", true);
             playerRef.GetComponent<PlayerInventoryScript>().playerHP -= 1;
             enemyLastAttackTime = Time.time;
-        }    
+        }
+        
+        enemySprite.GetComponent<Animator>().SetBool("attacking", false);
     }
 
     private void perseguirJogador()
     {
-        agent.SetDestination(playerRef.transform.position);   
+        agent.SetDestination(playerRef.transform.position);
+        enemySprite.GetComponent<Animator>().SetBool("walking", true);
     }
 
     void nocaute()
     {
         agent.isStopped = true;
+        enemySprite.GetComponent<Animator>().SetBool("walking", false);
 
         if (!recuperando)
         {
@@ -135,6 +148,7 @@ public class EnemyScript : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, numPontosDeRonda);
         Transform pontoSelecionado = pontosDeRonda.transform.GetChild(rand);
         agent.SetDestination(pontoSelecionado.position);
+        enemySprite.GetComponent<Animator>().SetBool("walking", true);
     }
 
     void rondar()
@@ -217,5 +231,24 @@ public class EnemyScript : MonoBehaviour
         angleInDegrees += eulerY;
 
         return new Vector2(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
+    }
+
+    void checarDirecao()
+    {
+        if (agent.velocity != Vector3.zero)
+        {
+            // Obter a direção normalizada
+            Vector3 direcaoNormalizada = agent.velocity.normalized;
+
+            // Verificar a componente x para determinar a direção
+            if (direcaoNormalizada.x < 0)
+            {
+                transform.rotation = new Quaternion(0, 180, 0, 0);
+            }
+            else if (direcaoNormalizada.x > 0)
+            {
+                transform.rotation = new Quaternion(0, 0, 0, 0);
+            }
+        }
     }
 }
