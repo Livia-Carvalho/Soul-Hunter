@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAttackScript : MonoBehaviour
@@ -62,7 +63,7 @@ public class PlayerAttackScript : MonoBehaviour
             Collider2D[] attackedEnemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemiesLayerMask);
             for (int i = 0; i < attackedEnemies.Length; i++)
             {
-                attackedEnemies[i].GetComponent<EnemyScript>().nocauteado = true;
+                attackedEnemies[i].GetComponent<EnemyScript>().serAtacado();
             }
 
             attacking = false;

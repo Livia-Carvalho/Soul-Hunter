@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 public class EnemyScript : MonoBehaviour
 {
 
+    public int enemyHP = 2;
     private GameObject enemySprite;
 
     public NavMeshAgent agent;
@@ -56,12 +57,12 @@ public class EnemyScript : MonoBehaviour
     {
         checarDirecao();
 
-        if (canSeePlayer)
+        if (canSeePlayer && !nocauteado)
         {
             rondando = false;
             perseguindo = true;
         }
-        else
+        else if(!canSeePlayer && !nocauteado)
         {
             rondando = true;
             perseguindo = false;
@@ -71,19 +72,12 @@ public class EnemyScript : MonoBehaviour
         {
             perseguirJogador();
             alcancarJogador();
-        }
-
-        if(rondando)
+        } else if (rondando)
         {
-            if(nocauteado)
-            {
-                nocaute();
-            }
-            else
-            {
-                rondar();
-            }
-
+            rondar();
+        } else if (nocauteado)
+        {
+            nocaute();
         }
     }
 
@@ -120,6 +114,7 @@ public class EnemyScript : MonoBehaviour
     {
         agent.isStopped = true;
         enemySprite.GetComponent<Animator>().SetBool("walking", false);
+        enemySprite.GetComponent<Animator>().SetBool("knocked out", true);
 
         if (!recuperando)
         {
@@ -130,8 +125,10 @@ public class EnemyScript : MonoBehaviour
         {
             if(Time.time > (tempoDeNocaute + tempoDeRecuperacao))
             {
+                enemySprite.GetComponent<Animator>().SetBool("knocked out", false);
                 nocauteado = false;
                 recuperando = false;
+                enemyHP = 2;
                 agent.isStopped = false;
                 definirProximoDestino();
             }
@@ -249,6 +246,19 @@ public class EnemyScript : MonoBehaviour
             {
                 transform.rotation = new Quaternion(0, 0, 0, 0);
             }
+        }
+    }
+
+    public void serAtacado()
+    {
+        enemySprite.GetComponent<Animator>().SetTrigger("hit");
+        enemyHP -= 1;
+
+        if(enemyHP <= 0)
+        {
+            nocauteado = true;
+            rondando = false;
+            perseguindo = false;
         }
     }
 }
