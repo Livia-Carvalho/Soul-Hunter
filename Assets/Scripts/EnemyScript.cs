@@ -6,17 +6,22 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyScript : MonoBehaviour
 {
 
     public NavMeshAgent agent;
     private float tempoDeChegada;
     private bool chegou = false;
     [SerializeField] private float duracaoDaRonda = 7f; //Segundos
-    [SerializeField] private float margemDistanciaDestino = 0.1f; 
-    public bool nocauteado = false;
-
+    [SerializeField] private float margemDistanciaDestino = 0.1f;
     public bool rondando = true;
+
+    public bool nocauteado = false;
+    public bool recuperando = false;
+    [SerializeField] private float tempoDeRecuperacao = 10f;
+    private float tempoDeNocaute;
+
+    
 
     // Start is called before the first frame update
     void Start()
@@ -31,32 +36,58 @@ public class EnemyMovement : MonoBehaviour
     {
         if(rondando)
         {
-            rondar();
+            if(nocauteado)
+            {
+                nocaute();
+            }
+            else
+            {
+                rondar();
+            }
+
+        }
+    }
+
+    void nocaute()
+    {
+        agent.isStopped = true;
+
+        if (!recuperando)
+        {
+            recuperando = true;
+            tempoDeNocaute = Time.time;
+
+        } else
+        {
+            if(Time.time > (tempoDeNocaute + tempoDeRecuperacao))
+            {
+                nocauteado = false;
+                recuperando = false;
+                definirProximoDestino();
+            }
         }
     }
 
     void definirProximoDestino()
     {
+        chegou = false;
 
-        if(Time.time > (tempoDeChegada + duracaoDaRonda))
-        {
-            chegou = false;
+        GameObject pontosDeRonda = GameObject.FindGameObjectWithTag("PontosDeRonda");
+        int numPontosDeRonda = pontosDeRonda.transform.childCount;
 
-            GameObject pontosDeRonda = GameObject.FindGameObjectWithTag("PontosDeRonda");
-            int numPontosDeRonda = pontosDeRonda.transform.childCount;
-
-            int rand = UnityEngine.Random.Range(0, numPontosDeRonda);
-            Transform pontoSelecionado = pontosDeRonda.transform.GetChild(rand);
-            agent.SetDestination(pontoSelecionado.position);
-        }
-
+        int rand = UnityEngine.Random.Range(0, numPontosDeRonda);
+        Transform pontoSelecionado = pontosDeRonda.transform.GetChild(rand);
+        agent.SetDestination(pontoSelecionado.position);
     }
 
     void rondar()
     {
         if (chegou)
         {
-            definirProximoDestino();
+            if (Time.time > (tempoDeChegada + duracaoDaRonda))
+            {
+                definirProximoDestino();
+            }
         }
         else
         {

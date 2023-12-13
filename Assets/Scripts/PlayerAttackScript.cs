@@ -8,8 +8,12 @@ public class PlayerAttackScript : MonoBehaviour
 
     private GameObject playerSprite;
     [SerializeField] private Transform attackPos;
-    [SerializeField] private float attackRange = 5f;
-    private LayerMask enemiesLayerMask;
+    [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private float attackCooldown = 1f;
+    private float lastAttackTime = 0;
+    [SerializeField] private LayerMask enemiesLayerMask;
+
+    bool attacking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,21 +24,25 @@ public class PlayerAttackScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        attackAnimation();
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            attacking = true;
+            attack();
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            attacking = false;
+            attackAnimation();
+        }
     }
 
     void attackAnimation()
     {
-        bool attacking = false;
-
-        if (Input.GetKey(KeyCode.Mouse0))
-        {
-            attacking = true;
-        }
 
         if (attacking == true)
         {
             playerSprite.GetComponent<Animator>().SetBool("attacking", true);
+            
         } else
         {
             playerSprite.GetComponent<Animator>().SetBool("attacking", false);
@@ -44,10 +52,27 @@ public class PlayerAttackScript : MonoBehaviour
 
     void attack()
     {
-        Collider2D[] inimigosAtacados = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemiesLayerMask);
-        for (int i = 0; i < inimigosAtacados.Length; i++)
+        
+        if(Time.time > (lastAttackTime + attackCooldown))
         {
-            
+            attackAnimation();
+
+            Collider2D[] attackedEnemies = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemiesLayerMask);
+            for (int i = 0; i < attackedEnemies.Length; i++)
+            {
+                attackedEnemies[i].GetComponent<EnemyScript>().nocauteado = true;
+            }
+
+            attacking = false;
+            lastAttackTime = Time.time;
         }
+        
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
+
 }
