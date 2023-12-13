@@ -20,7 +20,7 @@ public class PlayerAttackScript : MonoBehaviour
     void Start()
     {
         playerSprite = GameObject.FindGameObjectsWithTag("PlayerSprite")[0];
-        attackPos.position = gameObject.transform.position + new Vector3(10, 0, 0);
+        attackPos.position = gameObject.transform.position + new Vector3(0.5f, 0, 0);
     }
 
     // Update is called once per frame
@@ -73,8 +73,10 @@ public class PlayerAttackScript : MonoBehaviour
 
     public void moveAttackPosition(float verticalDirection, float horizontalDirection)
     {
-
-        attackPos.position = gameObject.transform.position + new Vector3(horizontalDirection * 10, verticalDirection * 10, 0);
+        if(verticalDirection != 0 ||  horizontalDirection != 0)
+        {
+            attackPos.position = gameObject.transform.position + new Vector3(horizontalDirection * 0.5f, verticalDirection * 0.5f, 0);
+        }  
     }
 
     private void OnDrawGizmosSelected()
