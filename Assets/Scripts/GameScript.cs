@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameScript : MonoBehaviour
 {
 
-    [SerializeField] private int numInimigos = 1;
+    [SerializeField] private int numInimigos = 2;
     [SerializeField] private GameObject enemyPrefab;
 
     // Start is called before the first frame update

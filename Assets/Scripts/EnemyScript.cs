@@ -263,9 +263,11 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    public bool checarPossuido()
+    public bool checarPossuido(GameObject inimigo)
     {
-        if(possuido)
+        EnemyScript enemyScript = inimigo.GetComponent<EnemyScript>();
+
+        if(enemyScript.possuido)
         {
             return true;
         }

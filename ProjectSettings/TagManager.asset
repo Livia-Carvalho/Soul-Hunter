@@ -10,6 +10,8 @@ TagManager:
   - Inimigos
   - RostoInimigo
   - Holy Water
+  - Inimigo
+  - Demon
   layers:
   - Default
   - TransparentFX

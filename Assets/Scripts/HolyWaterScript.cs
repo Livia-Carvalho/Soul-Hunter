@@ -8,6 +8,7 @@ public class HolyWaterScript : MonoBehaviour
     private PlayerMovementScript playerMovementScript;
     private GameObject player;
     [SerializeField] private EnemyScript enemyScript;
+    DemonScript demonScript;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,7 @@ public class HolyWaterScript : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerAttackScript = player.GetComponent<PlayerAttackScript>();
         playerMovementScript = player.GetComponent<PlayerMovementScript>();
+        demonScript = GameObject.FindGameObjectsWithTag("Demon")[0].GetComponent<DemonScript>();
 
         Vector3 direcaoDoArremesso = Vector3.zero;
 
@@ -46,7 +48,10 @@ public class HolyWaterScript : MonoBehaviour
 
         if(collision.tag == "Inimigo")
         {
-            
+            if(enemyScript.checarPossuido(collision.gameObject))
+            {
+                demonScript.chooseRandomNPC();
+            }
         }
     }
 }
