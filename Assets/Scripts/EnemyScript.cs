@@ -262,4 +262,14 @@ public class EnemyScript : MonoBehaviour
             perseguindo = false;
         }
     }
+
+    public bool checarPossuido()
+    {
+        if(possuido)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

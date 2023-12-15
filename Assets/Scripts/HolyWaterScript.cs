@@ -5,18 +5,29 @@ using UnityEngine;
 public class HolyWaterScript : MonoBehaviour
 {
     private PlayerAttackScript playerAttackScript;
+    private PlayerMovementScript playerMovementScript;
     private GameObject player;
+    [SerializeField] private EnemyScript enemyScript;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerAttackScript = player.GetComponent<PlayerAttackScript>();
+        playerMovementScript = player.GetComponent<PlayerMovementScript>();
 
-        Vector3 direcaoDoArremesso = new Vector3(playerAttackScript.playerLasHorizontalMovement, playerAttackScript.playerLastVerticalMovement, 0);
+        Vector3 direcaoDoArremesso = Vector3.zero;
 
-        Debug.Log("vertical = " + playerAttackScript.playerLastVerticalMovement.ToString());
-        Debug.Log("direcao = " + direcaoDoArremesso.ToString());
+        if (playerMovementScript.verticalInput != 0 || playerMovementScript.horizontalInput != 0)
+        {
+            direcaoDoArremesso = new Vector3(playerMovementScript.verticalInput, playerMovementScript.horizontalInput, 0);
+        }
+        else if (playerMovementScript.verticalInput == 0 && playerMovementScript.horizontalInput == 0)
+        {
+            direcaoDoArremesso = new Vector3(playerAttackScript.playerLasHorizontalMovement, playerAttackScript.playerLastVerticalMovement, 0);
+        }
+
+        Debug.Log(direcaoDoArremesso);
         gameObject.GetComponent<Rigidbody2D>().AddForce(direcaoDoArremesso * playerAttackScript.forcaDoArremesso);
     }
 
@@ -31,6 +42,11 @@ public class HolyWaterScript : MonoBehaviour
         if(collision.tag != "Holy Water")
         {
             Destroy(gameObject);
+        }
+
+        if(collision.tag == "Inimigo")
+        {
+            
         }
     }
 }

@@ -86,7 +86,7 @@ public class PlayerAttackScript : MonoBehaviour
         if(verticalDirection != 0 || horizontalDirection != 0)
         {
             attackPos.position = gameObject.transform.position + new Vector3(horizontalDirection * 0.5f, verticalDirection * 1f, 0);
-        } 
+        }
 
 
     }

@@ -13,6 +13,8 @@ public class DemonScript : MonoBehaviour
     private bool chegou = false;
     [SerializeField] private float margemDistancia = 0.5f;
     public int demonHP = 3;
+    private Transform inimigoPossuido;
+    private bool jaPossuiuAlguem = false;
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +44,15 @@ public class DemonScript : MonoBehaviour
     private void possuir(Transform inimigo)
     {
         EnemyScript script = inimigo.GetComponent<EnemyScript>();
+        inimigoPossuido = inimigo;
 
         script.possuido = true;
         script.enemyHP = 99;
+
+        if(!jaPossuiuAlguem)
+        {
+            jaPossuiuAlguem = true;
+        }
     }
 
     private void makeMaskInvisible()
@@ -65,8 +73,30 @@ public class DemonScript : MonoBehaviour
         GameObject inimigos = GameObject.FindGameObjectWithTag("Inimigos");
         int numDeInimigos = inimigos.transform.childCount;
 
-        int rand = UnityEngine.Random.Range(0, numDeInimigos);
-        Transform inimigoSelecionado = inimigos.transform.GetChild(rand);
+        Transform inimigoSelecionado = null;
+        if (!jaPossuiuAlguem){
+
+            int rand = UnityEngine.Random.Range(0, numDeInimigos);
+            inimigoSelecionado = inimigos.transform.GetChild(rand);
+        } else
+        {
+            bool temp = false;
+
+            do
+            {
+                int rand = UnityEngine.Random.Range(0, numDeInimigos);
+                inimigoSelecionado = inimigos.transform.GetChild(rand);
+
+                EnemyScript scriptInimigoSelecionado = inimigoSelecionado.GetComponent<EnemyScript>();
+                EnemyScript scriptInimigoPossuido = inimigoPossuido.GetComponent<EnemyScript>();
+
+                if (scriptInimigoSelecionado.possuido == false)
+                {
+                    scriptInimigoPossuido.possuido = false;
+                    temp = true;
+                }
+            } while(!temp);
+        }
 
         foreach (Transform t in inimigoSelecionado.GetComponentsInChildren<Transform>())
         {

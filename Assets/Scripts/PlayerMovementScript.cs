@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PlayerMovementScript : MonoBehaviour
 {
 
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private float runningMultiplier = 1.5f;
     private GameObject playerSprite;
+    public float horizontalInput = 0;
+    public float verticalInput = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +31,8 @@ public class NewBehaviourScript : MonoBehaviour
         bool running = false;
 
         //Check keys
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        float verticalInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
             finalMovementSpeed = movementSpeed * runningMultiplier;
@@ -40,11 +42,15 @@ public class NewBehaviourScript : MonoBehaviour
         PlayerAttackScript playerAttackScript = gameObject.GetComponent<PlayerAttackScript>();
         playerAttackScript.moveAttackPosition(verticalInput, horizontalInput);
 
-        if(horizontalInput != 0)
+        playerAttackScript.playerLastVerticalMovement = verticalInput;
+        if ((horizontalInput != 0 && verticalInput == 0) || (horizontalInput == 0 && verticalInput != 0))
+        {
+            playerAttackScript.playerLasHorizontalMovement = horizontalInput;
+            playerAttackScript.playerLastVerticalMovement = verticalInput;
+        } else if(horizontalInput != 0 && verticalInput != 0)
         {
             playerAttackScript.playerLasHorizontalMovement = horizontalInput;
         }
-        playerAttackScript.playerLastVerticalMovement = verticalInput;
 
         //Set animations
         if (horizontalInput == 0 && verticalInput == 0)
