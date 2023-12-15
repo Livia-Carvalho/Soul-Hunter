@@ -7,6 +7,7 @@ public class PlayerInventoryScript : MonoBehaviour
 {
 
     public int playerHP = 5;
+    public int playerHolyWaterAmmo = 3;
 
     // Start is called before the first frame update
     void Start()

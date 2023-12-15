@@ -67,7 +67,7 @@ public class DemonScript : MonoBehaviour
             moverAteRosto(targetFace, inimigoPossuido);
         }
     }
-
+        
     public void chooseRandomNPC()
     {
         GameObject inimigos = GameObject.FindGameObjectWithTag("Inimigos");
@@ -106,8 +106,34 @@ public class DemonScript : MonoBehaviour
             }
         }
 
-        moverAteRosto(targetFace, inimigoPossuido);
+        if (jaPossuiuAlguem)
+        {
+            moverAteRosto(targetFace, inimigoPossuido);
+        }
+        else
+        {
+            moverAteRosto(targetFace);
+        }
         possuir(inimigoSelecionado);
+    }
+
+    void moverAteRosto(Transform rosto)
+    {
+        float distance = 0;
+        Vector2 direcao = Vector2.zero;
+
+        distance = Vector2.Distance(transform.position, rosto.position);
+        direcao = (rosto.position - gameObject.transform.position).normalized;
+
+
+        transform.position = Vector2.MoveTowards(this.transform.position, rosto.position, moveSpeed * Time.deltaTime);
+        movingToFace = true;
+
+        if (Vector2.Distance(targetFace.position, gameObject.transform.position) <= margemDistancia)
+        {
+            chegou = true;
+            movingToFace = false;
+        }
     }
 
     void moverAteRosto(Transform rosto, Transform inimigoAtual)
