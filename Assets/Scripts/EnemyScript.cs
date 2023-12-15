@@ -10,6 +10,7 @@ public class EnemyScript : MonoBehaviour
 {
 
     public int enemyHP = 2;
+    public bool possuido = false;
     private GameObject enemySprite;
 
     public NavMeshAgent agent;

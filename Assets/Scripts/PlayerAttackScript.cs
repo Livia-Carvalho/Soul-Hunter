@@ -7,12 +7,18 @@ using UnityEngine;
 public class PlayerAttackScript : MonoBehaviour
 {
 
+    public float playerLastVerticalMovement = 0;
+    public float playerLasHorizontalMovement = 1;
     private GameObject playerSprite;
+
     [SerializeField] private Transform attackPos;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private float attackCooldown = 1f;
     private float lastAttackTime = 0;
     [SerializeField] private LayerMask enemiesLayerMask;
+
+    [SerializeField] private GameObject holyWaterPrefab;
+    public float forcaDoArremesso = 500;
 
     bool attacking = false;
 
@@ -36,6 +42,9 @@ public class PlayerAttackScript : MonoBehaviour
         {
             attacking = false;
             attackAnimation();
+        } else if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            Instantiate(holyWaterPrefab, attackPos.position, transform.rotation);
         }
     }
 
@@ -74,10 +83,12 @@ public class PlayerAttackScript : MonoBehaviour
 
     public void moveAttackPosition(float verticalDirection, float horizontalDirection)
     {
-        if(verticalDirection != 0 ||  horizontalDirection != 0)
+        if(verticalDirection != 0 || horizontalDirection != 0)
         {
-            attackPos.position = gameObject.transform.position + new Vector3(horizontalDirection * 0.5f, verticalDirection * 0.5f, 0);
-        }  
+            attackPos.position = gameObject.transform.position + new Vector3(horizontalDirection * 0.5f, verticalDirection * 1f, 0);
+        } 
+
+
     }
 
     private void OnDrawGizmosSelected()

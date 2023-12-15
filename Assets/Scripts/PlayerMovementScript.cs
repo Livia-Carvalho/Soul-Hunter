@@ -37,7 +37,14 @@ public class NewBehaviourScript : MonoBehaviour
             running = true;
         }
 
-        gameObject.GetComponent<PlayerAttackScript>().moveAttackPosition(verticalInput, horizontalInput);
+        PlayerAttackScript playerAttackScript = gameObject.GetComponent<PlayerAttackScript>();
+        playerAttackScript.moveAttackPosition(verticalInput, horizontalInput);
+
+        if(horizontalInput != 0)
+        {
+            playerAttackScript.playerLasHorizontalMovement = horizontalInput;
+        }
+        playerAttackScript.playerLastVerticalMovement = verticalInput;
 
         //Set animations
         if (horizontalInput == 0 && verticalInput == 0)

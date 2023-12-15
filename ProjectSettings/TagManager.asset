@@ -7,6 +7,9 @@ TagManager:
   - PlayerSprite
   - PontosDeRonda
   - EnemySprite
+  - Inimigos
+  - RostoInimigo
+  - Holy Water
   layers:
   - Default
   - TransparentFX
