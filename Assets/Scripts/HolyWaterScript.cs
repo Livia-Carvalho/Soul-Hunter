@@ -29,7 +29,6 @@ public class HolyWaterScript : MonoBehaviour
             direcaoDoArremesso = new Vector3(playerAttackScript.playerLasHorizontalMovement, playerAttackScript.playerLastVerticalMovement, 0);
         }
 
-        Debug.Log(direcaoDoArremesso);
         gameObject.GetComponent<Rigidbody2D>().AddForce(direcaoDoArremesso * playerAttackScript.forcaDoArremesso);
     }
 
@@ -43,14 +42,17 @@ public class HolyWaterScript : MonoBehaviour
     {
         if(collision.tag != "Holy Water")
         {
-            Destroy(gameObject);
+            gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            Destroy(gameObject, 10f);
         }
 
         if(collision.tag == "Inimigo")
         {
-            if(enemyScript.checarPossuido(collision.gameObject))
+            
+            if (enemyScript.checarPossuido(collision.gameObject))
             {
-                demonScript.chooseRandomNPC();
+                Debug.Log("funcao retornou verdadeiro");
+                demonScript.moverAoTopo(demonScript.inimigoPossuido);
             }
         }
     }

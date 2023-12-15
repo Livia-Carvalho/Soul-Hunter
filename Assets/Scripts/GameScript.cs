@@ -5,12 +5,15 @@ using UnityEngine;
 public class GameScript : MonoBehaviour
 {
 
-    [SerializeField] private int numInimigos = 2;
+    [SerializeField] private int numInimigos = 5;
     [SerializeField] private GameObject enemyPrefab;
+    private DemonScript demonScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        demonScript = GameObject.FindGameObjectsWithTag("Demon")[0].GetComponent<DemonScript>();
+
         for (int i = 0; i < numInimigos; i++)
         {
             GameObject inimigosContainer = GameObject.FindGameObjectWithTag("Inimigos");
@@ -23,6 +26,8 @@ public class GameScript : MonoBehaviour
 
             Instantiate(enemyPrefab, pontoSelecionado.position, pontoSelecionado.rotation, inimigosContainer.transform);
         }
+
+        demonScript.chooseRandomNPC();
     }
 
     // Update is called once per frame
